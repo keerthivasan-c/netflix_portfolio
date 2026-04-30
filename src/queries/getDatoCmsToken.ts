@@ -5,7 +5,7 @@ export const getDatoCmsToken = (): string => {
 
   switch (hostname) {
     case 'ror.sumanthsamala.com':
-    case 'sumanthsamala.com':
+    case 'keerthivasan-c.github.io':
     case 'ror.localhost':
     case 'localhost':
       return process.env.REACT_APP_DATOCMS_ROR_TOKEN ?? '';
