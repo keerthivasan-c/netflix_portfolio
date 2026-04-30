@@ -44,6 +44,8 @@
 .skill-name {
   display: flex;
   justify-content: center;
+
+  
 }
 
 .letter {

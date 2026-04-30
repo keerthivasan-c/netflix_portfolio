@@ -3,9 +3,7 @@
 export interface ProfileBanner {
   backgroundImage: { url: string };
   headline: string;
-  resumeLink: {
-    url: string;
-  };
+  resumeLink: string;
   linkedinLink: string;
   profileSummary: string;
 }
@@ -57,4 +55,5 @@ export interface Skill {
   category: string;
   description: string;
   icon: string;
+
 }
