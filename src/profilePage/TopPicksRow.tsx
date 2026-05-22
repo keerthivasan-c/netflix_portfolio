@@ -2,8 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TopPicksRow.css';
 import { FaPassport, FaCode, FaBriefcase, FaCertificate, FaProjectDiagram, FaEnvelope, FaMusic, FaBook } from 'react-icons/fa';
-
-type ProfileType = 'recruiter' | 'developer' | 'stalker' | 'adventure';
+import { getProfileRouteState, ProfileType } from './profileConfig';
 
 interface TopPicksRowProps {
   profile: ProfileType;
@@ -31,7 +30,7 @@ const topPicksConfig = {
     { title: "Experience", imgSrc: "https://picsum.photos/seed/resume/250/200", route: "/work-experience", icon: <FaBriefcase /> },
     { title: "Certifications", imgSrc: "https://picsum.photos/seed/achievements/250/200", route: "/certifications", icon: <FaCertificate /> },
   ],
-  adventure: [
+  adventurer: [
     { title: "Music", imgSrc: "https://picsum.photos/seed/music/250/200", route: "/music", icon: <FaMusic /> },
     { title: "Projects", imgSrc: "https://picsum.photos/seed/innovation/250/200", route: "/projects", icon: <FaProjectDiagram /> },
     { title: "Reading", imgSrc: "https://picsum.photos/seed/books/250/200", route: "/reading", icon: <FaBook /> },
@@ -53,7 +52,7 @@ const TopPicksRow: React.FC<TopPicksRowProps> = ({ profile }) => {
           <div 
             key={index} 
             className="pick-card" 
-            onClick={() => navigate(pick.route)}
+            onClick={() => navigate(pick.route, { state: getProfileRouteState(profile) })}
             style={{ animationDelay: `${index * 0.2}s` }} // Adding delay based on index
           >
             <img src={pick.imgSrc} alt={pick.title} className="pick-image" />

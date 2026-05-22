@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import './ProfilePage.css';
 
 import ProfileBanner from './ProfileBanner';
 import TopPicksRow from './TopPicksRow';
 import ContinueWatching from './ContinueWatching';
-type ProfileType = 'recruiter' | 'developer' | 'stalker' | 'adventure';
+import { getProfileRouteState, ProfileRouteState, rememberSelectedProfile, resolveProfileName } from './profileConfig';
 
 const ProfilePage: React.FC = () => {
   const location = useLocation();
-  const backgroundGif = location.state?.backgroundGif || "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif"; // Default GIF
   const { profileName } = useParams<{ profileName: string }>();
+  const profile = resolveProfileName(profileName);
+  const profileState = getProfileRouteState(profile);
+  const locationState = location.state as Partial<ProfileRouteState> | null;
+  const backgroundGif = locationState?.selectedProfile === profile && locationState.backgroundGif
+    ? locationState.backgroundGif
+    : profileState.backgroundGif;
 
-  const profile = ['recruiter', 'developer', 'stalker', 'adventure'].includes(profileName!)
-    ? (profileName as ProfileType)
-    : 'recruiter';
+  useEffect(() => {
+    rememberSelectedProfile(profile);
+  }, [profile]);
+
   return (
     <>
       <div

@@ -3,14 +3,29 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaHome, FaBriefcase, FaTools, FaProjectDiagram, FaEnvelope } from 'react-icons/fa'; // Import icons
 import './Navbar.css';
 import netflixLogo from '../images/logo-2.png';
-import blueImage from '../images/blue.png';
+import {
+  getProfileRouteState,
+  ProfileRouteState,
+  rememberSelectedProfile,
+  resolveProfileName,
+} from '../profilePage/profileConfig';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const profileImage = location.state?.profileImage || blueImage;
+  const routeProfileName = location.pathname.startsWith('/profile/')
+    ? decodeURIComponent(location.pathname.split('/')[2] || '')
+    : null;
+  const locationState = location.state as Partial<ProfileRouteState> | null;
+  const selectedProfile = resolveProfileName(routeProfileName || locationState?.selectedProfile);
+  const profileState = getProfileRouteState(selectedProfile);
+  const hasMatchingProfileState = locationState?.selectedProfile === selectedProfile;
+  const profileImage = hasMatchingProfileState && locationState?.profileImage
+    ? locationState.profileImage
+    : profileState.profileImage;
+  const homePath = `/profile/${selectedProfile}`;
 
   const handleScroll = () => {
     setIsScrolled(window.scrollY > 80);
@@ -20,6 +35,10 @@ const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    rememberSelectedProfile(selectedProfile);
+  }, [selectedProfile]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -37,11 +56,11 @@ const Navbar: React.FC = () => {
             <img src={netflixLogo} alt="Netflix" />
           </Link>
           <ul className="navbar-links">
-            <li><Link to="/browse">Home</Link></li>
-            <li><Link to="/work-experience">Professional</Link></li>
-            <li><Link to="/skills">Skills</Link></li>
-            <li><Link to="/projects">Projects</Link></li>
-            <li><Link to="/contact-me">Hire Me</Link></li>
+            <li><Link to={homePath} state={profileState}>Home</Link></li>
+            <li><Link to="/work-experience" state={profileState}>Professional</Link></li>
+            <li><Link to="/skills" state={profileState}>Skills</Link></li>
+            <li><Link to="/projects" state={profileState}>Projects</Link></li>
+            <li><Link to="/contact-me" state={profileState}>Hire Me</Link></li>
           </ul>
         </div>
         <div className="navbar-right">
@@ -64,11 +83,11 @@ const Navbar: React.FC = () => {
           <img src={netflixLogo} alt="Netflix Logo" />
         </div>
         <ul>
-          <li><Link to="/browse" onClick={closeSidebar}><FaHome /> Home</Link></li>
-          <li><Link to="/work-experience" onClick={closeSidebar}><FaBriefcase /> Professional</Link></li>
-          <li><Link to="/skills" onClick={closeSidebar}><FaTools /> Skills</Link></li>
-          <li><Link to="/projects" onClick={closeSidebar}><FaProjectDiagram /> Projects</Link></li>
-          <li><Link to="/contact-me" onClick={closeSidebar}><FaEnvelope /> Hire Me</Link></li>
+          <li><Link to={homePath} state={profileState} onClick={closeSidebar}><FaHome /> Home</Link></li>
+          <li><Link to="/work-experience" state={profileState} onClick={closeSidebar}><FaBriefcase /> Professional</Link></li>
+          <li><Link to="/skills" state={profileState} onClick={closeSidebar}><FaTools /> Skills</Link></li>
+          <li><Link to="/projects" state={profileState} onClick={closeSidebar}><FaProjectDiagram /> Projects</Link></li>
+          <li><Link to="/contact-me" state={profileState} onClick={closeSidebar}><FaEnvelope /> Hire Me</Link></li>
         </ul>
       </div>
     </>

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './ContinueWatching.css';
-
-type ProfileType = 'recruiter' | 'developer' | 'stalker' | 'adventure';
+import { getProfileRouteState, ProfileType } from './profileConfig';
 
 interface ContinueWatchingProps {
   profile: ProfileType;
@@ -27,7 +26,7 @@ const continueWatchingConfig = {
     { title: "Blogs", imgSrc: "https://picsum.photos/id/1027/300/200", link: "/blogs" },
     { title: "Contact Me", imgSrc: "https://picsum.photos/id/1029/300/200", link: "/contact-me" }
   ],
-  adventure: [
+  adventurer: [
     { title: "Music", imgSrc: "https://picsum.photos/id/1025/300/200", link: "/music" },
     { title: "Reading", imgSrc: "https://picsum.photos/id/1026/300/200", link: "/reading" },
     { title: "Certifications", imgSrc: "https://picsum.photos/id/1028/300/200", link: "/certifications" },
@@ -43,7 +42,7 @@ const ContinueWatching: React.FC<ContinueWatchingProps> = ({ profile }) => {
       <h2 className="row-title">Continue Watching for {profile}</h2>
       <div className="card-row">
         {continueWatching.map((pick, index) => (
-          <Link to={pick.link} key={index} className="pick-card">
+          <Link to={pick.link} state={getProfileRouteState(profile)} key={index} className="pick-card">
             <img src={pick.imgSrc} alt={pick.title} className="pick-image" />
             <div className="overlay">
               <div className="pick-label">{pick.title}</div>
