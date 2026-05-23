@@ -16,6 +16,27 @@
       content="Web site created using create-react-app"
     />
     <title>Keerthivasan Chandrasekar</title>
+    <script>
+      (function () {
+        var query = window.location.search;
+
+        if (query.indexOf("?/") === 0) {
+          var route = query
+            .slice(2)
+            .split("&")
+            .map(function (part) {
+              return part.replace(/~and~/g, "&");
+            })
+            .join("?");
+
+          window.history.replaceState(
+            null,
+            "",
+            window.location.pathname.replace(/\/$/, "") + "/" + route + window.location.hash
+          );
+        }
+      })();
+    </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1NR05ZT5H3"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
